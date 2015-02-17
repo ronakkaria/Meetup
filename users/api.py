@@ -12,11 +12,15 @@ class UserDetails(APIView):
 		except User.DoesNotExist:
 			raise Http404
 
-
 	def get(self, request, pk, format=None):
 		user = self.get_object(pk)
 		serialized_user = UserSerializer(user)
-		return Response(serialized_user.data)  
+		return Response(serialized_user.data)
+		
+	def post(self, request, pk, format=None):
+		user = self.get_object(pk)
+		serialized_user = UserSerializer(user)
+		return Response(serialized_user.data)
 
 
 class Friends(APIView):
