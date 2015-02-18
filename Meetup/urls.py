@@ -11,8 +11,10 @@ urlpatterns = format_suffix_patterns(patterns('',
 
     url(r'^admin/', include(admin.site.urls)),
     url(r'^api/users/get_user_by_id/(?P<pk>[0-9]+)/$', users_api.UserDetails.as_view()),
-    url(r'^api/users/get_friends/(?P<pk>[0-9]+)$', users_api.Friends.as_view()),
-    url(r'^api/users/delete_user/(?P<pk>[0-9]+)$', users_api.DeleteUser.as_view()),
-
+    url(r'^api/users/get_friends/(?P<pk>[0-9]+)/$', users_api.GetFriends.as_view()),
+    url(r'^api/users/delete_user/(?P<pk>[0-9]+)/$', users_api.DeleteUser.as_view()),
+    url(r'^api/users/delete_friend/(?P<pk>[0-9]+)/?(?P<friend_id>[0-9]+)/$', users_api.DeleteFriend.as_view()),
+    url(r'^api/users/create_user/$', users_api.CreateUser.as_view()),
+    url(r'^api/users/add_friends/(?P<pk>[0-9]+)/$', users_api.AddFriends.as_view()),
 ))
 
