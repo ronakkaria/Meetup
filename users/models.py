@@ -1,4 +1,5 @@
 from django.db import models
+from django.http import Http404
 
 # Create your models here.
 class User(models.Model):
@@ -7,6 +8,18 @@ class User(models.Model):
 
 	def __str__(self):
 		return self.name
+		
+	def get_user_by_id(id):
+		try:
+			return User.objects.get(id=id)
+		except User.DoesNotExist:
+			raise Http404
+			
+	def get_friend_by_id(self, friend_id):
+		try:
+			return self.friends.get(id=friend_id)
+		except User.DoesNotExist:
+			raise Http404
 
 	# relationships = models.ManyToManyFied('self', through='Relationship', 
 	# 	symmetrical = True, 
