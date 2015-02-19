@@ -6,7 +6,7 @@ from rest_framework.response import Response
 class UserDetails(APIView):
 	
 	def get(self, request, id, format=None):
-		user = User.get_user_by_id(id)
+		user = User.getUserById(id)
 		serialized_user = UserSerializer(user)
 		return Response(serialized_user.data)
 
@@ -14,7 +14,7 @@ class UserDetails(APIView):
 class GetFriends(APIView):
 
 	def get(self, request, id, format=None):
-		user = User.get_user_by_id(id)
+		user = User.getUserById(id)
 		friends = user.friends.all()
 		serialized_friends = UserSerializer(friends, many=True)
 		return Response(serialized_friends.data)
@@ -23,8 +23,8 @@ class GetFriends(APIView):
 class DeleteFriend(APIView):
 
 	def delete(self, request, id, friend_id, format=None):
-		user = User.get_user_by_id(id)
-		friend = user.get_friend_by_id(friend_id)
+		user = User.getUserById(id)
+		friend = user.getFriendById(friend_id)
 		serialized_friend = UserSerializer(friend)
 		user.friends.remove(friend)
 		return Response(serialized_friend.data)
@@ -33,8 +33,10 @@ class DeleteFriend(APIView):
 class DeleteUser(APIView):
 
 	def delete(self, request, id, format=None):
-		user = User.get_user_by_id(id)
+		user = User.getUserById(id)
 		user.delete()
+		serialized_user = UserSerializer(user)
+		return Response(serialized_user)
 
 
 class CreateUser(APIView):
@@ -50,14 +52,16 @@ class CreateUser(APIView):
 class AddFriends(APIView):
 
 	def post(self, request, id, format=None):
-		user = User.get_user_by_id(id)
+		user = User.getUserById(id)
 		data = request.data
 		friends_data_list = data['friends']
 		status_dict = {}
 		for friends_data in friends_data_list:
+			friend_id = friends_data['id']
+			if friend_id == id:
+				continue
 			try:
-				friend_id = friends_data['id']
-				friend = User.objects.get(id=friendId)
+				friend = User.objects.get(id=friend_id)
 				user.friends.add(friend)
 				status_dict[str(friend_id)] = True
 			except User.DoesNotExist:

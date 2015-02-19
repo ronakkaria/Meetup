@@ -6,16 +6,17 @@ class User(models.Model):
 	name = models.CharField(max_length=100)
 	friends = models.ManyToManyField('self', blank=True)
 
-	def __str__(self):
+	def __unicode__(self):
 		return self.name
 		
-	def get_user_by_id(id):
+	@staticmethod
+	def getUserById(id):
 		try:
 			return User.objects.get(id=id)
 		except User.DoesNotExist:
 			raise Http404
-			
-	def get_friend_by_id(self, friend_id):
+					
+	def getFriendById(self, friend_id):
 		try:
 			return self.friends.get(id=friend_id)
 		except User.DoesNotExist:
